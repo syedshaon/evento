@@ -3,21 +3,37 @@ type paramsType = { params: { slug: string } };
 import Image from "next/image";
 import H1 from "@/components/H1";
 import { Metadata } from "next";
+import prisma from "@/lib/db";
+import { getEvent } from "@/lib/server-utils";
 
 export async function generateMetadata({ params }: paramsType): Promise<Metadata> {
   const slug = params.slug;
-  const response = await fetch(`https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`);
-  const event = await response.json();
 
+  const event = await getEvent({ slug });
   return {
     title: event.name,
   };
 }
 
+// Following is make sure that all slugs are statically generated
+export async function generateStaticParams() {
+  // const response = await fetch("https://bytegrad.com/course-assets/projects/evento/api/events");
+  // const events = await response.json();
+  const events = await prisma.eventoEvent.findMany();
+
+  return [
+    ...events.map((event) => ({
+      params: {
+        slug: event.slug,
+      },
+    })),
+  ];
+}
+
 const eventPage = async ({ params }: paramsType) => {
   const slug = params.slug;
-  const response = await fetch(`https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`);
-  const event = await response.json();
+
+  const event = await getEvent({ slug });
 
   return (
     <>

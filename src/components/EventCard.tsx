@@ -1,12 +1,12 @@
 "use client";
 import React, { useRef } from "react";
-import { singleEventType } from "@/lib/types";
+import { EventoEvent } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-function EventCard({ event }: { event: singleEventType }) {
-  const MotionLink = motion(Link);
+function EventCard({ event }: { event: EventoEvent }) {
+  const MotionLink = motion.create(Link);
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["0 1", "1.5 1"] });
   const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
@@ -16,7 +16,6 @@ function EventCard({ event }: { event: singleEventType }) {
       ref={ref}
       href={`/event/${event.slug}`}
       style={{
-        // @ts-ignore
         opacity: opacityProgress,
         scale: scaleProgress,
       }}

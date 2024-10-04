@@ -1,3 +1,4 @@
+// No more needed importing from prisma now
 export type singleEventType = {
   id: number;
   name: string;
@@ -9,3 +10,5 @@ export type singleEventType = {
   imageUrl: string;
   description: string;
 };
+
+//
